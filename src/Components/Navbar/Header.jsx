@@ -1,0 +1,80 @@
+import React, { useState, useEffect } from "react";
+import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import logo from "../../assets/images/logo.png";
+import { Link } from "react-router-dom";
+import { LogIn } from "lucide-react";
+const Header = () => {
+  const token = localStorage.getItem("token");
+  const [logedIn, setLogedIn] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const role = localStorage.getItem("userRole");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <Navbar fluid rounded className=" z-50 w-full bg-white shadow-md">
+      <Navbar.Brand href="https://flowbite-react.com">
+        <img
+          src={logo}
+          className="mr-3 h-6 sm:h-10"
+          alt="Flowbite React Logo"
+        />
+      </Navbar.Brand>
+      <div className="flex md:order-2 list-none">
+        {token ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar
+                alt="User settings"
+                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                rounded
+              />
+            }
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">Welcom</span>
+              <span className="block truncate text-sm font-medium">
+                jobaia@gmail.com
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Item>
+              {role == "Basic" ? (
+                <Link to={"/user_profile"}>Profile</Link>
+              ) : (
+                <Link to={"/business-profile"}>Profile</Link>
+              )}
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            {/* <Dropdown.Item onClick={localStorage.removeItem("token")}>
+              Sign out
+            </Dropdown.Item> */}
+          </Dropdown>
+        ) : (
+          <Link to="/auth" className="btn btn-primary">
+            Login
+          </Link>
+        )}
+
+        <Navbar.Toggle />
+      </div>
+      <Navbar.Collapse>
+        <Navbar.Link href="#" active>
+          Home
+        </Navbar.Link>
+        <Navbar.Link href="/about">About</Navbar.Link>
+        <Navbar.Link href="/contact">Contact</Navbar.Link>
+      </Navbar.Collapse>
+    </Navbar>
+  );
+};
+
+export default Header;

@@ -1,0 +1,201 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+.company-jobs-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.company-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Controller Section */
+.controller {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.controller-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.controller-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.company-logo img {
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.company-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+/* Job Listings Section */
+.job-listings {
+  margin-bottom: 40px;
+}
+
+.job-listings h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.jobs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.job-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.job-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.job-card p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Show More Button Styles */
+.show-more-btn {
+  display: block;
+  margin-top: 15px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.show-more-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 40%;
+  max-width: 800px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-height: 80vh;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #215e9e;
+  cursor: pointer;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.close-modal-btn:hover {
+  color: #000;
+}
+
+.modal h2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  color: #000000;
+  font-weight: 600;
+}
+
+.modal h3 {
+  margin-top: 20px;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.modal p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.dot-list {
+  margin-top: 10px;
+  color: #136fd1;
+}
+
+.dot-list p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #215e9e;
+}
+
+.blue-text {
+  color: #007bff;
+}

@@ -12,11 +12,8 @@ const LoginAPI = async (setloading, setError, data, navigate) => {
         });
 
         const result = await response.json();
-        console.log(result);
 
         if (response.ok) {
-            console.log(result.token);
-
             localStorage.setItem("token", result.token);
             localStorage.setItem("user", result.user._id);
             localStorage.setItem("userRole", result.user.role)

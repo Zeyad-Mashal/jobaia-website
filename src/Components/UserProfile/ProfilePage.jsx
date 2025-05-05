@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import CreatableSelect from 'react-select/creatable';
-import './ProfilePage.css';
+import React, { useState } from "react";
+import CreatableSelect from "react-select/creatable";
+import "./ProfilePage.css";
 
 const EditableField = ({ label, placeholder, value, onChange }) => {
   const [editing, setEditing] = useState(false);
-  const [localValue, setLocalValue] = useState(value || '');
+  const [localValue, setLocalValue] = useState(value || "");
 
   const handleBlur = () => {
     setEditing(false);
@@ -34,18 +34,24 @@ const EditableField = ({ label, placeholder, value, onChange }) => {
   );
 };
 
-const EditableTags = ({ title, label, placeholder, selectedOptions, setSelectedOptions }) => {
+const EditableTags = ({
+  title,
+  label,
+  placeholder,
+  selectedOptions,
+  setSelectedOptions,
+}) => {
   const initialOptions = [
-    { value: 'JavaScript', label: 'JavaScript' },
-    { value: 'React', label: 'React' },
-    { value: 'Node.js', label: 'Node.js' },
-    { value: 'Python', label: 'Python' },
-    { value: 'Django', label: 'Django' },
-    { value: 'Machine Learning', label: 'Machine Learning' },
-    { value: 'UI/UX Design', label: 'UI/UX Design' },
-    { value: 'SQL', label: 'SQL' },
-    { value: 'AWS', label: 'AWS' },
-    { value: 'Data Analysis', label: 'Data Analysis' },
+    { value: "JavaScript", label: "JavaScript" },
+    { value: "React", label: "React" },
+    { value: "Node.js", label: "Node.js" },
+    { value: "Python", label: "Python" },
+    { value: "Django", label: "Django" },
+    { value: "Machine Learning", label: "Machine Learning" },
+    { value: "UI/UX Design", label: "UI/UX Design" },
+    { value: "SQL", label: "SQL" },
+    { value: "AWS", label: "AWS" },
+    { value: "Data Analysis", label: "Data Analysis" },
   ];
 
   const [options, setOptions] = useState(initialOptions);
@@ -55,17 +61,23 @@ const EditableTags = ({ title, label, placeholder, selectedOptions, setSelectedO
       const newlySelected = selected[selected.length - 1];
       if (newlySelected) {
         setSelectedOptions((prev) => [...prev, newlySelected]);
-        setOptions((prev) => prev.filter((opt) => opt.value !== newlySelected.value));
+        setOptions((prev) =>
+          prev.filter((opt) => opt.value !== newlySelected.value)
+        );
       }
     }
   };
 
   const handleDelete = (valueToRemove) => {
-    const removedOption = selectedOptions.find((opt) => opt.value === valueToRemove);
+    const removedOption = selectedOptions.find(
+      (opt) => opt.value === valueToRemove
+    );
     if (removedOption) {
       setOptions((prev) => [...prev, removedOption]);
     }
-    setSelectedOptions((prev) => prev.filter((item) => item.value !== valueToRemove));
+    setSelectedOptions((prev) =>
+      prev.filter((item) => item.value !== valueToRemove)
+    );
   };
 
   const availableOptions = options.filter(
@@ -109,13 +121,13 @@ const EditableTags = ({ title, label, placeholder, selectedOptions, setSelectedO
 
 const EditableList = ({ title, label, placeholder, items, setItems }) => {
   const [showInput, setShowInput] = useState(false);
-  const [newItem, setNewItem] = useState('');
+  const [newItem, setNewItem] = useState("");
   const [showAll, setShowAll] = useState(false);
 
   const handleAdd = () => {
     if (newItem.trim()) {
       setItems([...items, newItem.trim()]);
-      setNewItem('');
+      setNewItem("");
       setShowInput(false);
     }
   };
@@ -154,7 +166,7 @@ const EditableList = ({ title, label, placeholder, items, setItems }) => {
             className="text-blue-600 hover:underline"
             onClick={() => setShowAll(!showAll)}
           >
-            {showAll ? 'Show Less' : 'Show More'}
+            {showAll ? "Show Less" : "Show More"}
           </button>
         </div>
       )}
@@ -167,7 +179,12 @@ const EditableList = ({ title, label, placeholder, items, setItems }) => {
             value={newItem}
             onChange={(e) => setNewItem(e.target.value)}
           />
-          <button className="bg-blue-600 text-white rounded px-4" onClick={handleAdd}>Add</button>
+          <button
+            className="bg-blue-600 text-white rounded px-4"
+            onClick={handleAdd}
+          >
+            Add
+          </button>
         </div>
       ) : (
         <button
@@ -183,12 +200,13 @@ const EditableList = ({ title, label, placeholder, items, setItems }) => {
 
 const ProfilePage = () => {
   // States remain the same as before
-  const [fullName, setFullName] = useState("Mariam Mohamed");
-  const [title, setTitle] = useState("");
+  const data = JSON.parse(localStorage.getItem("profileData"));
+  // const [fullName, setFullName] = useState();
+  const [title, setTitle] = useState(data?.title);
   const [location, setLocation] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(data?.phone);
   const [cvLink, setCvLink] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState(data?.age);
   const [careerLevel, setCareerLevel] = useState("");
   const [minSalary, setMinSalary] = useState("");
   const [jobSearchStatus, setJobSearchStatus] = useState("");
@@ -198,21 +216,21 @@ const ProfilePage = () => {
   const [skills, setSkills] = useState([]);
   const [experience, setExperience] = useState([]);
   const [education, setEducation] = useState([]);
-  const [saveMessage, setSaveMessage] = useState('');
+  const [saveMessage, setSaveMessage] = useState("");
 
   const getInitials = (name) => {
-    const parts = name.trim().split(' ');
+    const parts = name.trim().split(" ");
     if (parts.length >= 2) {
       return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
     }
-    return name[0]?.toUpperCase() || '';
+    return name[0]?.toUpperCase() || "";
   };
 
-  const initials = getInitials(fullName);
+  const initials = getInitials(userName);
 
   const handleSave = () => {
     const profileData = {
-      fullName,
+      userName,
       title,
       location,
       phone,
@@ -226,11 +244,11 @@ const ProfilePage = () => {
       jobTypes,
       skills,
       experience,
-      education
+      education,
     };
-    console.log('Saved Profile Data:', profileData);
-    setSaveMessage('Your profile has been saved successfully!');
-    setTimeout(() => setSaveMessage(''), 3000);
+    localStorage.setItem("profileData", JSON.stringify(profileData));
+    setSaveMessage("Your profile has been saved successfully!");
+    setTimeout(() => setSaveMessage(""), 3000);
   };
 
   return (
@@ -241,9 +259,19 @@ const ProfilePage = () => {
             {initials}
           </div>
           <div>
-            <h4 className="text-xl font-bold mb-2">{fullName}</h4>
-            <EditableField label="Add your title" placeholder="Enter your title" value={title} onChange={setTitle} />
-            <EditableField label="Add your location" placeholder="Enter your location" value={location} onChange={setLocation} />
+            <h4 className="text-xl font-bold mb-2">{userName}</h4>
+            <EditableField
+              label="Add your title"
+              placeholder="Enter your title"
+              value={title}
+              onChange={setTitle}
+            />
+            <EditableField
+              label="Add your location"
+              placeholder="Enter your location"
+              value={location}
+              onChange={setLocation}
+            />
           </div>
         </div>
 
@@ -251,8 +279,13 @@ const ProfilePage = () => {
         <div className="mb-6">
           <h5 className="text-lg font-semibold mb-3">Contact Info</h5>
           <div className="flex items-center mb-2">
-            <span className="mr-2">📞</span>
-            <EditableField label="Add your phone" placeholder="Enter your phone" value={phone} onChange={setPhone} />
+            <span className="mr-2">📞 {data?.phone}</span>
+            <EditableField
+              label="Add your phone"
+              placeholder="Enter your phone"
+              value={phone}
+              onChange={setPhone}
+            />
           </div>
           <div className="flex items-center mb-2">
             <span className="mr-2">📧</span>
@@ -260,10 +293,20 @@ const ProfilePage = () => {
           </div>
           <div className="flex items-center mb-2">
             <span className="mr-2">📄</span>
-            <EditableField label="Add your CV link" placeholder="Enter a link to your CV" value={cvLink} onChange={setCvLink} />
+            <EditableField
+              label="Add your CV link"
+              placeholder="Enter a link to your CV"
+              value={cvLink}
+              onChange={setCvLink}
+            />
           </div>
           {cvLink && (
-            <a href={cvLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+            <a
+              href={cvLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
               View CV
             </a>
           )}
@@ -273,36 +316,120 @@ const ProfilePage = () => {
         <div className="mb-6">
           <h5 className="text-lg font-semibold mb-3">General Info</h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><strong>Age:</strong> <EditableField label="Add your age" placeholder="Enter your age" value={age} onChange={setAge} /></div>
-            <div><strong>Career Level:</strong> <EditableField label="Add your career level" placeholder="Enter career level" value={careerLevel} onChange={setCareerLevel} /></div>
-            <div><strong>Minimum Salary:</strong> <EditableField label="Add your min salary" placeholder="Enter min salary" value={minSalary} onChange={setMinSalary} /></div>
-            <div><strong>Job Search Status:</strong> <EditableField label="Add job search status" placeholder="Enter status" value={jobSearchStatus} onChange={setJobSearchStatus} /></div>
+            <div>
+              <strong>Age: {data?.age}</strong>{" "}
+              {data?.age ? (
+                <EditableField
+                  label="Update your age"
+                  placeholder="Enter your age"
+                  value={age}
+                  onChange={setAge}
+                />
+              ) : (
+                <EditableField
+                  label="Add your age"
+                  placeholder="Enter your age"
+                  value={age}
+                  onChange={setAge}
+                />
+              )}
+            </div>
+            <div>
+              <strong>Career Level:</strong>{" "}
+              <EditableField
+                label="Add your career level"
+                placeholder="Enter career level"
+                value={careerLevel}
+                onChange={setCareerLevel}
+              />
+            </div>
+            <div>
+              <strong>Minimum Salary: {data?.minSalary}</strong>{" "}
+              {data?.minSalary ? (
+                <EditableField
+                  label="Update your min salary"
+                  placeholder="Enter min salary"
+                  value={minSalary}
+                  onChange={setMinSalary}
+                />
+              ) : (
+                <EditableField
+                  label="Add your min salary"
+                  placeholder="Enter min salary"
+                  value={minSalary}
+                  onChange={setMinSalary}
+                />
+              )}
+            </div>
+            <div>
+              <strong>Job Search Status:</strong>{" "}
+              <EditableField
+                label="Add job search status"
+                placeholder="Enter status"
+                value={jobSearchStatus}
+                onChange={setJobSearchStatus}
+              />
+            </div>
           </div>
         </div>
 
         {/* Career Interests */}
         <div>
           <h5 className="text-lg font-semibold mb-3">Career Interests</h5>
-          <EditableField label="Job Titles and Keywords" placeholder="Enter job titles or keywords" value={jobTitles} onChange={setJobTitles} />
-          <EditableField label="Job Categories" placeholder="Enter job categories" value={jobCategories} onChange={setJobCategories} />
-          <EditableField label="Job Types" placeholder="Enter job types" value={jobTypes} onChange={setJobTypes} />
+          <EditableField
+            label="Job Titles and Keywords"
+            placeholder="Enter job titles or keywords"
+            value={jobTitles}
+            onChange={setJobTitles}
+          />
+          <EditableField
+            label="Job Categories"
+            placeholder="Enter job categories"
+            value={jobCategories}
+            onChange={setJobCategories}
+          />
+          <EditableField
+            label="Job Types"
+            placeholder="Enter job types"
+            value={jobTypes}
+            onChange={setJobTypes}
+          />
         </div>
       </div>
 
       {/* Skills, Experience, Education Sections */}
-      <EditableTags title="Skills" label="Skill" placeholder="Search or type a skill..." selectedOptions={skills} setSelectedOptions={setSkills} />
-      <EditableList title="Work Experience" label="Work Experience" placeholder="Enter experience" items={experience} setItems={setExperience} />
-      <EditableList title="Education" label="Education" placeholder="Enter education" items={education} setItems={setEducation} />
+      <EditableTags
+        title="Skills"
+        label="Skill"
+        placeholder="Search or type a skill..."
+        selectedOptions={skills}
+        setSelectedOptions={setSkills}
+      />
+      <EditableList
+        title="Work Experience"
+        label="Work Experience"
+        placeholder="Enter experience"
+        items={experience}
+        setItems={setExperience}
+      />
+      <EditableList
+        title="Education"
+        label="Education"
+        placeholder="Enter education"
+        items={education}
+        setItems={setEducation}
+      />
 
       <div className="text-right">
-        <button className="bg-blue-600 text-white px-6 py-2 rounded" onClick={handleSave}>Save Profile</button>
+        <button
+          className="bg-blue-600 text-white px-6 py-2 rounded"
+          onClick={handleSave}
+        >
+          Save Profile
+        </button>
       </div>
 
-      {saveMessage && (
-        <div className="mt-4 text-green-600">
-          {saveMessage}
-        </div>
-      )}
+      {saveMessage && <div className="mt-4 text-green-600">{saveMessage}</div>}
     </div>
   );
 };

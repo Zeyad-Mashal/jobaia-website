@@ -229,7 +229,7 @@ const BProfilePage = () => {
       jobCategories,
       jobTypes,
     };
-    console.log("Saved Profile Data:", profileData);
+    console.log("Saved Profile Data:", fullName);
     alert("Profile saved successfully!");
   };
 

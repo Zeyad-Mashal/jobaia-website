@@ -50,6 +50,8 @@ const Form = () => {
       CV: cv,
     };
 
+    const data = [{}];
+
     try {
       const res = await fetch(
         `https://jobaia-green.vercel.app/application/${userId}/${jobId}`,

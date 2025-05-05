@@ -13,9 +13,11 @@ const RegisterAPI = async (setloading, setError, data, setIsRegistering) => {
 
         const result = await response.json();
 
+
         if (response.ok) {  // 200, 201, 202
             setIsRegistering(false)
             setloading(false);
+            localStorage.setItem("userName", result.user.CompanyName)
         } else {
             if (response.status == 400) {
                 setError(result.err)

@@ -1,0 +1,17 @@
+.controller-btn {
+  padding: 8px 16px;
+  border: 1px solid #3b82f6; /* blue-500 */
+  border-radius: 8px;
+  color: #3b82f6;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.controller-btn:hover {
+  background: #bfdbfe; /* blue-100 */
+}
+
+.controller-btn.active {
+  background: #3b82f6; /* blue-500 */
+  color: white;
+}

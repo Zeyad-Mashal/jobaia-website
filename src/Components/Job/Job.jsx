@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaChevronDown, FaChevronUp, FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import "./Job.css";
@@ -23,11 +23,42 @@ const Job = () => {
   const [showMoreCategories, setShowMoreCategories] = useState(false);
   const [showMoreJobTypes, setShowMoreJobTypes] = useState(false);
 
+  const [filters, setFilters] = useState({
+    jobType: [],
+    country: [],
+    city: [],
+    area: [],
+    careerLevel: [],
+    maxExperience: null,
+    minExperience: null,
+    category: [],
+    datePosted: null,
+  });
+
   const openFilter = () => {
     document.querySelector(".job-sidebar").style.display = "block";
   };
+
   const closeFilter = () => {
     document.querySelector(".job-sidebar").style.display = "none";
+  };
+
+  const updateFilter = (filterType, value) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+      if (Array.isArray(newFilters[filterType])) {
+        if (newFilters[filterType].includes(value)) {
+          newFilters[filterType] = newFilters[filterType].filter(
+            (v) => v !== value
+          );
+        } else {
+          newFilters[filterType] = [...newFilters[filterType], value];
+        }
+      } else {
+        newFilters[filterType] = value;
+      }
+      return newFilters;
+    });
   };
 
   const allCountries = [
@@ -88,8 +119,8 @@ const Job = () => {
     ? allCareerLevels
     : allCareerLevels.slice(0, 4);
 
-  const maxYears = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, ..., 10]
-  const minYears = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, ..., 10]
+  const maxYears = Array.from({ length: 10 }, (_, i) => i + 1);
+  const minYears = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const allCategories = [
     "All",
@@ -143,7 +174,14 @@ const Job = () => {
         <div className="job-sidebar">
           <IoMdClose className="close_icon" onClick={closeFilter} />
           <h3>Filters</h3>
-          <p style={{ fontSize: "14px", color: "#666" }}>0 filters selected</p>
+          <p style={{ fontSize: "14px", color: "#666" }}>
+            {
+              Object.values(filters)
+                .flat()
+                .filter((v) => v && v !== "All").length
+            }{" "}
+            filters selected
+          </p>
           <hr />
 
           <div className="filter-section">
@@ -161,15 +199,30 @@ const Job = () => {
             {isWorkplaceOpen && (
               <div className="accordion-body">
                 <label>
-                  <input type="checkbox" /> Hybrid
+                  <input
+                    type="checkbox"
+                    checked={filters.jobType.includes("Hybrid")}
+                    onChange={() => updateFilter("jobType", "Hybrid")}
+                  />
+                  Hybrid
                 </label>
                 <br />
                 <label>
-                  <input type="checkbox" /> Onsite
+                  <input
+                    type="checkbox"
+                    checked={filters.jobType.includes("Onsite")}
+                    onChange={() => updateFilter("jobType", "Onsite")}
+                  />
+                  Onsite
                 </label>
                 <br />
                 <label>
-                  <input type="checkbox" /> Remote
+                  <input
+                    type="checkbox"
+                    checked={filters.jobType.includes("Remote")}
+                    onChange={() => updateFilter("jobType", "Remote")}
+                  />
+                  Remote
                 </label>
               </div>
             )}
@@ -199,7 +252,12 @@ const Job = () => {
 
                 {visibleCountries.map((country, index) => (
                   <label key={index} className="country-option">
-                    <input type="checkbox" /> {country}
+                    <input
+                      type="checkbox"
+                      checked={filters.country.includes(country)}
+                      onChange={() => updateFilter("country", country)}
+                    />
+                    {country}
                     <br />
                   </label>
                 ))}
@@ -255,7 +313,12 @@ const Job = () => {
 
                 {visibleCities.map((city, index) => (
                   <label key={index} className="country-option">
-                    <input type="checkbox" /> {city}
+                    <input
+                      type="checkbox"
+                      checked={filters.city.includes(city)}
+                      onChange={() => updateFilter("city", city)}
+                    />
+                    {city}
                     <br />
                   </label>
                 ))}
@@ -312,7 +375,12 @@ const Job = () => {
 
                 {visibleAreas.map((area, index) => (
                   <label key={index} className="country-option">
-                    <input type="checkbox" /> {area}
+                    <input
+                      type="checkbox"
+                      checked={filters.area.includes(area)}
+                      onChange={() => updateFilter("area", area)}
+                    />
+                    {area}
                     <br />
                   </label>
                 ))}
@@ -369,7 +437,12 @@ const Job = () => {
 
                 {visibleCareerLevels.map((level, index) => (
                   <label key={index} className="country-option">
-                    <input type="checkbox" /> {level}
+                    <input
+                      type="checkbox"
+                      checked={filters.careerLevel.includes(level)}
+                      onChange={() => updateFilter("careerLevel", level)}
+                    />
+                    {level}
                     <br />
                   </label>
                 ))}
@@ -433,7 +506,11 @@ const Job = () => {
                     {isMaxOpen && (
                       <div className="dropdown-menu">
                         {maxYears.map((year, index) => (
-                          <div key={index} className="dropdown-item">
+                          <div
+                            key={index}
+                            className="dropdown-item"
+                            onClick={() => updateFilter("maxExperience", year)}
+                          >
                             {year} years
                           </div>
                         ))}
@@ -455,7 +532,11 @@ const Job = () => {
                     {isMinOpen && (
                       <div className="dropdown-menu">
                         {minYears.map((year, index) => (
-                          <div key={index} className="dropdown-item">
+                          <div
+                            key={index}
+                            className="dropdown-item"
+                            onClick={() => updateFilter("minExperience", year)}
+                          >
                             {year} years
                           </div>
                         ))}
@@ -491,7 +572,12 @@ const Job = () => {
 
                 {visibleCategories.map((category, index) => (
                   <label key={index} className="country-option">
-                    <input type="checkbox" /> {category}
+                    <input
+                      type="checkbox"
+                      checked={filters.category.includes(category)}
+                      onChange={() => updateFilter("category", category)}
+                    />
+                    {category}
                     <br />
                   </label>
                 ))}
@@ -548,7 +634,12 @@ const Job = () => {
 
                 {visibleJobTypes.map((type, index) => (
                   <label key={index} className="country-option">
-                    <input type="checkbox" /> {type}
+                    <input
+                      type="checkbox"
+                      checked={filters.jobType.includes(type)}
+                      onChange={() => updateFilter("jobType", type)}
+                    />
+                    {type}
                     <br />
                   </label>
                 ))}
@@ -597,19 +688,39 @@ const Job = () => {
             {isDatePostedOpen && (
               <div className="accordion-body">
                 <label>
-                  <input type="checkbox" /> All
+                  <input
+                    type="checkbox"
+                    checked={filters.datePosted === "All"}
+                    onChange={() => updateFilter("datePosted", "All")}
+                  />
+                  All
                 </label>
                 <br />
                 <label>
-                  <input type="checkbox" /> Last 24 Hours
+                  <input
+                    type="checkbox"
+                    checked={filters.datePosted === "Last 24 Hours"}
+                    onChange={() => updateFilter("datePosted", "Last 24 Hours")}
+                  />
+                  Last 24 Hours
                 </label>
                 <br />
                 <label>
-                  <input type="checkbox" /> Last Week
+                  <input
+                    type="checkbox"
+                    checked={filters.datePosted === "Last Week"}
+                    onChange={() => updateFilter("datePosted", "Last Week")}
+                  />
+                  Last Week
                 </label>
                 <br />
                 <label>
-                  <input type="checkbox" /> Last Month
+                  <input
+                    type="checkbox"
+                    checked={filters.datePosted === "Last Month"}
+                    onChange={() => updateFilter("datePosted", "Last Month")}
+                  />
+                  Last Month
                 </label>
               </div>
             )}
@@ -617,7 +728,7 @@ const Job = () => {
         </div>
 
         <div className="main-content">
-          <JobList />
+          <JobList filters={filters} />
         </div>
       </div>
     </div>

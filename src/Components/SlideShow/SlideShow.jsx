@@ -9,16 +9,15 @@ import image3 from "../../assets/images/oppo.png";
 const SlideShow = () => {
   const slideImages = [
     {
-       url: image1,
-    }, 
-    { 
-        url: image2,
-
+      url: image1,
     },
-    { 
-      url: image3 ,
-    }
- ];
+    {
+      url: image2,
+    },
+    {
+      url: image3,
+    },
+  ];
 
   return (
     <section className="py-10 flex items-center justify-center w-full">
@@ -46,11 +45,11 @@ const SlideShow = () => {
                   magnam. Quasi nobis accusamus debitis impedit et quo
                   laboriosam eaque veniam.
                 </p>
-                <button className="bg-blue-600 text-white px-4 sm:px-6 py-2 hover:bg-blue-700">
-                  Get Started Now
+                <button className="bg-blue-600 rounded-2xl text-white px-4 sm:px-6 py-2 hover:bg-blue-700">
+                  <a href="/jobs">Get Started Now</a>
                 </button>
               </div>
-              <div className="md:w-1/2">
+              <div className="slideImage">
                 <img
                   src={slideImage.url}
                   alt="slide"

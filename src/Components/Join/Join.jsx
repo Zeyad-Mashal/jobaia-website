@@ -27,7 +27,7 @@ const Join = () => {
                   You are minutes away from the right job.
                 </p>
                 <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                  Join Now
+                  <a href="/jobs">Join Now</a>
                 </button>
               </div>
             </div>

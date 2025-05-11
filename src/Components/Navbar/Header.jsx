@@ -17,10 +17,11 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const userName = localStorage.getItem("userName");
 
   return (
     <Navbar fluid rounded className=" z-50 w-full bg-white shadow-md">
-      <Navbar.Brand href="https://flowbite-react.com">
+      <Navbar.Brand href="/">
         <img
           src={logo}
           className="mr-3 h-6 sm:h-10"
@@ -43,7 +44,7 @@ const Header = () => {
             <Dropdown.Header>
               <span className="block text-sm">Welcom</span>
               <span className="block truncate text-sm font-medium">
-                jobaia@gmail.com
+                {userName}
               </span>
             </Dropdown.Header>
             <Dropdown.Item>
@@ -67,9 +68,10 @@ const Header = () => {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link href="#" active>
+        <Navbar.Link href="/" active>
           Home
         </Navbar.Link>
+        <Navbar.Link href="/jobs">Our Jobs</Navbar.Link>
         <Navbar.Link href="/about">About</Navbar.Link>
         <Navbar.Link href="/contact">Contact</Navbar.Link>
       </Navbar.Collapse>

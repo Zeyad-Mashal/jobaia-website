@@ -73,6 +73,10 @@
   margin-top: 20px;
 }
 
+.job-details-container .icon {
+  font-size: 25px;
+}
+
 .skills-section h2,
 .job-details-container h2,
 .featured-jobs-box h2 {

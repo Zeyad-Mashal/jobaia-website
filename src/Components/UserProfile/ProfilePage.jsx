@@ -55,12 +55,15 @@ const EditableTags = ({
   ];
 
   const [options, setOptions] = useState(initialOptions);
-
   const handleChange = (selected) => {
     if (selected) {
       const newlySelected = selected[selected.length - 1];
       if (newlySelected) {
-        setSelectedOptions((prev) => [...prev, newlySelected]);
+        setSelectedOptions((prev) => {
+          // التأكد أن prev هي مصفوفة
+          const prevOptions = Array.isArray(prev) ? prev : [];
+          return [...prevOptions, newlySelected];
+        });
         setOptions((prev) =>
           prev.filter((opt) => opt.value !== newlySelected.value)
         );
@@ -79,16 +82,19 @@ const EditableTags = ({
       prev.filter((item) => item.value !== valueToRemove)
     );
   };
-
   const availableOptions = options.filter(
-    (opt) => !selectedOptions.some((sel) => sel.value === opt.value)
+    (opt) =>
+      !(
+        selectedOptions &&
+        selectedOptions.some((sel) => sel.value === opt.value)
+      )
   );
 
   return (
     <div className="bg-white shadow rounded p-5 mb-6">
       <h5 className="text-lg font-semibold mb-4">{title}</h5>
       <div className="flex flex-wrap gap-2 mb-4">
-        {selectedOptions.map((item) => (
+        {selectedOptions?.map((item) => (
           <div
             key={item.value}
             className="flex items-center bg-gray-100 rounded-full px-3 py-1 text-sm"
@@ -136,8 +142,8 @@ const EditableList = ({ title, label, placeholder, items, setItems }) => {
     const updatedItems = items.filter((_, i) => i !== index);
     setItems(updatedItems);
   };
-
-  const displayedItems = showAll ? items : items.slice(0, 3);
+  const displayedItems =
+    items && Array.isArray(items) ? (showAll ? items : items.slice(0, 3)) : [];
 
   return (
     <div className="bg-white shadow rounded p-5 mb-6">
@@ -160,7 +166,7 @@ const EditableList = ({ title, label, placeholder, items, setItems }) => {
         ))}
       </ul>
 
-      {items.length > 3 && (
+      {items?.length > 3 && (
         <div className="text-center mb-4">
           <button
             className="text-blue-600 hover:underline"
@@ -199,26 +205,29 @@ const EditableList = ({ title, label, placeholder, items, setItems }) => {
 };
 
 const ProfilePage = () => {
-  // States remain the same as before
   const data = JSON.parse(localStorage.getItem("profileData"));
-  // const [fullName, setFullName] = useState();
+  const userName = localStorage.getItem("userName");
   const [title, setTitle] = useState(data?.title);
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(data?.location);
   const [phone, setPhone] = useState(data?.phone);
-  const [cvLink, setCvLink] = useState("");
+  const [email, setemail] = useState(data?.email);
+  const [cvLink, setCvLink] = useState(data?.cvLink);
   const [age, setAge] = useState(data?.age);
-  const [careerLevel, setCareerLevel] = useState("");
-  const [minSalary, setMinSalary] = useState("");
-  const [jobSearchStatus, setJobSearchStatus] = useState("");
-  const [jobTitles, setJobTitles] = useState("");
-  const [jobCategories, setJobCategories] = useState("");
-  const [jobTypes, setJobTypes] = useState("");
-  const [skills, setSkills] = useState([]);
-  const [experience, setExperience] = useState([]);
-  const [education, setEducation] = useState([]);
+  const [careerLevel, setCareerLevel] = useState(data?.careerLevel);
+  const [minSalary, setMinSalary] = useState(data?.minSalary);
+  const [jobSearchStatus, setJobSearchStatus] = useState(data?.jobSearchStatus);
+  const [jobTitles, setJobTitles] = useState(data?.jobTitles);
+  const [jobCategories, setJobCategories] = useState(data?.jobCategories);
+  const [jobTypes, setJobTypes] = useState(data?.jobTypes);
+  const [skills, setSkills] = useState(data?.skills);
+  const [experience, setExperience] = useState(data?.experience);
+  const [education, setEducation] = useState(data?.education);
   const [saveMessage, setSaveMessage] = useState("");
 
   const getInitials = (name) => {
+    // تأكد من أن الاسم ليس فارغًا أو null
+    if (!name) return ""; // إذا كان الاسم null أو فارغ، ارجع سلسلة فارغة
+
     const parts = name.trim().split(" ");
     if (parts.length >= 2) {
       return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
@@ -234,6 +243,7 @@ const ProfilePage = () => {
       title,
       location,
       phone,
+      email,
       cvLink,
       age,
       careerLevel,
@@ -259,7 +269,9 @@ const ProfilePage = () => {
             {initials}
           </div>
           <div>
-            <h4 className="text-xl font-bold mb-2">{userName}</h4>
+            <h4 className="text-xl font-bold mb-2">
+              {userName ? userName : "Your Name"}
+            </h4>
             <EditableField
               label="Add your title"
               placeholder="Enter your title"
@@ -277,9 +289,9 @@ const ProfilePage = () => {
 
         {/* Contact Info */}
         <div className="mb-6">
-          <h5 className="text-lg font-semibold mb-3">Contact Info</h5>
+          <h5 className="text-lg font-semibold mb-3">Contact Info:</h5>
           <div className="flex items-center mb-2">
-            <span className="mr-2">📞 {data?.phone}</span>
+            <span className="mr-2">📞 </span>
             <EditableField
               label="Add your phone"
               placeholder="Enter your phone"
@@ -289,7 +301,7 @@ const ProfilePage = () => {
           </div>
           <div className="flex items-center mb-2">
             <span className="mr-2">📧</span>
-            <p className="text-gray-500">mariam74565@gmail.com</p>
+            <p className="text-gray-500">{email}</p>
           </div>
           <div className="flex items-center mb-2">
             <span className="mr-2">📄</span>
@@ -314,10 +326,10 @@ const ProfilePage = () => {
 
         {/* General Info */}
         <div className="mb-6">
-          <h5 className="text-lg font-semibold mb-3">General Info</h5>
+          <h5 className="text-lg font-semibold mb-3">General Info:</h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <strong>Age: {data?.age}</strong>{" "}
+              <strong>Age:</strong>{" "}
               {data?.age ? (
                 <EditableField
                   label="Update your age"
@@ -336,15 +348,24 @@ const ProfilePage = () => {
             </div>
             <div>
               <strong>Career Level:</strong>{" "}
-              <EditableField
-                label="Add your career level"
-                placeholder="Enter career level"
-                value={careerLevel}
-                onChange={setCareerLevel}
-              />
+              {data?.careerLevel ? (
+                <EditableField
+                  label="Update your career level"
+                  placeholder="Enter career level"
+                  value={careerLevel}
+                  onChange={setCareerLevel}
+                />
+              ) : (
+                <EditableField
+                  label="Add your careerLevel"
+                  placeholder="Enter careerLevel"
+                  value={careerLevel}
+                  onChange={setCareerLevel}
+                />
+              )}
             </div>
             <div>
-              <strong>Minimum Salary: {data?.minSalary}</strong>{" "}
+              <strong>Minimum Salary:</strong>{" "}
               {data?.minSalary ? (
                 <EditableField
                   label="Update your min salary"
@@ -363,19 +384,28 @@ const ProfilePage = () => {
             </div>
             <div>
               <strong>Job Search Status:</strong>{" "}
-              <EditableField
-                label="Add job search status"
-                placeholder="Enter status"
-                value={jobSearchStatus}
-                onChange={setJobSearchStatus}
-              />
+              {data?.jobSearchStatus ? (
+                <EditableField
+                  label="Update job search status"
+                  placeholder="Enter status"
+                  value={jobSearchStatus}
+                  onChange={setJobSearchStatus}
+                />
+              ) : (
+                <EditableField
+                  label="Add job search status"
+                  placeholder="job search status"
+                  value={jobSearchStatus}
+                  onChange={setJobSearchStatus}
+                />
+              )}
             </div>
           </div>
         </div>
 
         {/* Career Interests */}
         <div>
-          <h5 className="text-lg font-semibold mb-3">Career Interests</h5>
+          <h5 className="text-lg font-semibold mb-3">Career Interests:</h5>
           <EditableField
             label="Job Titles and Keywords"
             placeholder="Enter job titles or keywords"
@@ -401,7 +431,7 @@ const ProfilePage = () => {
       <EditableTags
         title="Skills"
         label="Skill"
-        placeholder="Search or type a skill..."
+        placeholder="Select a skill..."
         selectedOptions={skills}
         setSelectedOptions={setSkills}
       />

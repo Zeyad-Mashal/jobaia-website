@@ -1,17 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import "./Controller.css";
+const Controller = ({ userId }) => {
+  const linkClass = ({ isActive }) =>
+    isActive ? "controller-btn active" : "controller-btn"; // خلي active هنا
 
-const Controller = () => {
   return (
-    <nav className="controller fixed top-0 left-0 w-full bg-white shadow-md z-50">
-      <div className="max-w-7xl mx-auto px-4 flex justify-center gap-4 py-2">
-        <Link to="/business-profile" className="controller-btn">General Info</Link>
-        <button className="controller-btn">Our Applicants</button>
-        <button className="controller-btn">Feedback</button>
-        <button className="controller-btn">Post Jobs</button>
-        <Link to="/business-jobs" className="controller-btn">All Jobs</Link>
+    <div className="controller">
+      <div className="flex justify-content-center align-items-center text-center gap-4 p-4 bg-white shadow-md rounded-md w-fit">
+        <NavLink to="/business-profile" className={linkClass}>
+          General Info
+        </NavLink>
+
+        <NavLink to="/getAllFeedbacks" className={linkClass}>
+          Feedback
+        </NavLink>
+
+        <NavLink to={`/create_job/${userId}`} className={linkClass}>
+          Post Jobs
+        </NavLink>
+
+        <NavLink to="/business-jobs" className={linkClass}>
+          All Jobs
+        </NavLink>
       </div>
-    </nav>
+    </div>
   );
 };
 

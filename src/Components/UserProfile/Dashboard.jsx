@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfilePage from "./ProfilePage";
-
+import GetApplications from "../../API/GetApplications/GetApplications";
 const Dashboard = () => {
+  useEffect(() => {
+    getAllApplications();
+  }, []);
+  const id = localStorage.getItem("user");
   const [key, setKey] = useState("profile");
   const [selectedApp, setSelectedApp] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [getApplications, setGetApplications] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const applications = [
     {
@@ -78,6 +85,10 @@ const Dashboard = () => {
     setSelectedApp(null);
   };
 
+  const getAllApplications = () => {
+    GetApplications(setLoading, setError, setGetApplications, id);
+  };
+
   return (
     <div className="container mx-auto my-8 p-4">
       {/* Tabs */}
@@ -111,16 +122,18 @@ const Dashboard = () => {
 
       {key === "applications" && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {applications.map((app) => (
+          {getApplications.map((app) => (
             <div
               key={app.id}
               className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
             >
-              <h3 className="text-lg font-semibold mb-2">{app.title}</h3>
-              <p className="text-gray-600">{app.company}</p>
-              <p className="text-gray-500 text-sm">{app.location}</p>
-              <p className="text-gray-400 text-xs mb-4">
-                Applied on: {new Date(app.date).toLocaleDateString()}
+              <h3 className="text-lg font-semibold mb-2">
+                {app.firstName} {app.lastName}
+              </h3>
+              <p className="text-gray-600">{app.phoneNabmer}</p>
+              <p className="text-gray-500 text-sm">
+                {app.city}
+                {app.state}
               </p>
               <button
                 onClick={() => handleView(app)}
@@ -143,52 +156,59 @@ const Dashboard = () => {
             >
               ✖
             </button>
-            <h2 className="text-2xl font-bold mb-4">{selectedApp.title}</h2>
+            <h2 className="text-2xl font-bold mb-4">
+              {selectedApp.firstName} {selectedApp.lastName}
+            </h2>
             <div className="space-y-2 text-gray-700">
               <p>
-                <strong>Company:</strong> {selectedApp.company}
+                <strong>Phone Number:</strong> {selectedApp.phoneNabmer}
               </p>
               <p>
-                <strong>Location:</strong> {selectedApp.location}
+                <strong>Alternate Number:</strong> {selectedApp.alternateNumber}
               </p>
               <p>
-                <strong>Salary:</strong> {selectedApp.salary}
+                <strong>Address:</strong> {selectedApp.mandatoryAddress}
               </p>
               <p>
-                <strong>Contract Type:</strong> {selectedApp.contractType}
+                <strong>City:</strong> {selectedApp.city}
               </p>
               <p>
-                <strong>Job Type:</strong> {selectedApp.jobType}
+                <strong>State:</strong> {selectedApp.state}
               </p>
               <p>
-                <strong>Work Hours:</strong> {selectedApp.workHours}
+                <strong>ZIP Code:</strong> {selectedApp.zipCode}
               </p>
               <p>
-                <strong>Applied On:</strong>{" "}
-                {new Date(selectedApp.date).toLocaleDateString()}
+                <strong>Job Needed:</strong> {selectedApp.jobNeeded}
               </p>
-              <div className="mt-4">
-                <h3 className="font-semibold text-lg">Description:</h3>
-                <p>{selectedApp.description}</p>
-              </div>
-
-              <div className="mt-4">
-                <h3 className="font-semibold text-lg">Requirements:</h3>
-                <ul className="list-disc list-inside">
-                  {selectedApp.requirements.map((req, index) => (
-                    <li key={index}>{req}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-4">
-                <h3 className="font-semibold text-lg">Benefits:</h3>
-                <ul className="list-disc list-inside">
-                  {selectedApp.benefits.map((benefit, index) => (
-                    <li key={index}>{benefit}</li>
-                  ))}
-                </ul>
-              </div>
+              <p>
+                <strong>Other Job:</strong> {selectedApp.otherJob}
+              </p>
+              <p>
+                <strong>Working Period (years):</strong>{" "}
+                {selectedApp.WorkingPeriod}
+              </p>
+              <p>
+                <strong>Worked with Us Before?:</strong>{" "}
+                {selectedApp.workedUs === "1" ? "Yes" : "No"}
+              </p>
+              {selectedApp.workedUs === "1" && (
+                <p>
+                  <strong>When:</strong>{" "}
+                  {`${selectedApp.workedUsWhen_day}/${selectedApp.workedUsWhen_month}/${selectedApp.workedUsWhen_year}`}
+                </p>
+              )}
+              <p>
+                <strong>CV:</strong>{" "}
+                <a
+                  href={selectedApp.CV}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
+                >
+                  View CV
+                </a>
+              </p>
             </div>
           </div>
         </div>

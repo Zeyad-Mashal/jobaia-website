@@ -23,6 +23,9 @@ import ContactUs from "./Components/ContactUs/ContactUs";
 import Dashboard from "./Components/UserProfile/Dashboard";
 import BusJobs from "./Components/BusinessJobs/BusJobs";
 import BProfilePage from "./Components/BusinessProfile/BProfilePage";
+import BusinessProfile from "./Components/BusinessProfile/BusinessProfile";
+import OurApplicants from "./Components/Applicants/OurApplicants";
+import AllFeedbacks from "./Components/AllFeedbacks/AllFeedbacks";
 function App() {
   return (
     <Router>
@@ -52,7 +55,9 @@ function AppContent() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/business-jobs" element={<BusJobs />} />
-        <Route path="/business-profile" element={<BProfilePage />} />
+        <Route path="/business-profile" element={<BusinessProfile />} />
+        <Route path="/our_applicants/:id" element={<OurApplicants />} />
+        <Route path="/getAllFeedbacks" element={<AllFeedbacks />} />
       </Routes>
 
       <CustomFooter />

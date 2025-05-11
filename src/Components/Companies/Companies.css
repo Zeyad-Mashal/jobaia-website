@@ -9,4 +9,5 @@
 }
 .slider-container img {
   width: 250px;
+  border-radius: 15px;
 }

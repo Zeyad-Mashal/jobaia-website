@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./JobPosting.css";
 import { Button, Modal, ModalBody, ModalHeader } from "flowbite-react";
 import { FaCheckCircle } from "react-icons/fa";
+import Controller from "../Controller/Controller";
 const JobPostingForm = () => {
   const userId = localStorage.getItem("user");
   const token = localStorage.getItem("token");
@@ -15,7 +16,7 @@ const JobPostingForm = () => {
   const [jobDescription, setJobDescription] = useState("");
   const [jobRequirements, setJobRequirements] = useState("");
   const [document, setDocument] = useState("");
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const jobTypes = [
     "Full Time",
@@ -86,6 +87,7 @@ const JobPostingForm = () => {
 
   return (
     <>
+      <Controller userId={userId} />
       <Modal
         show={openModal}
         size="md"
@@ -107,6 +109,7 @@ const JobPostingForm = () => {
           </div>
         </ModalBody>
       </Modal>
+
       <div className="job-form">
         <h2>Job Posting</h2>
 
@@ -235,7 +238,7 @@ const JobPostingForm = () => {
           onChange={(e) => setDocument(e.target.value)}
         />
 
-        <button type="button" onClick={handleSubmit}>
+        <button type="button" className="submitBtn" onClick={handleSubmit}>
           Post
         </button>
       </div>

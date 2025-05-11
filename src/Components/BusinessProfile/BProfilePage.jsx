@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 
+// ===== EditableField Component =====
 const EditableField = ({ label, placeholder, value, onChange }) => {
   const [editing, setEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value || "");
@@ -25,13 +26,14 @@ const EditableField = ({ label, placeholder, value, onChange }) => {
           className="text-blue-500 cursor-pointer hover:underline"
           onClick={() => setEditing(true)}
         >
-          {value ? value : `+ ${label}`} {/* Show placeholder or value */}
+          {value ? value : `+ ${label}`}
         </span>
       )}
     </div>
   );
 };
 
+// ===== EditableTags Component =====
 const EditableTags = ({ title, label, placeholder }) => {
   const [items, setItems] = useState([]);
   const [options, setOptions] = useState([
@@ -60,20 +62,18 @@ const EditableTags = ({ title, label, placeholder }) => {
   };
 
   const handleAddNewSkill = () => {
-    setIsAdding(true); // Show input for new skill
+    setIsAdding(true);
   };
 
   const handleSaveNewSkill = async () => {
-    if (!newSkill.trim()) return; // Do not proceed if skill is empty
+    if (!newSkill.trim()) return;
     const newOption = { label: newSkill, value: newSkill };
     setOptions((prev) => [...prev, newOption]);
     setItems((prev) => [...prev, newSkill]);
     try {
       const response = await fetch("https://your-backend-api.com/skills", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ skill: newSkill }),
       });
       if (response.ok) {
@@ -127,6 +127,7 @@ const EditableTags = ({ title, label, placeholder }) => {
   );
 };
 
+// ===== EditableList Component =====
 const EditableList = ({ title, label, placeholder }) => {
   const [items, setItems] = useState([]);
   const [showInput, setShowInput] = useState(false);
@@ -189,7 +190,28 @@ const EditableList = ({ title, label, placeholder }) => {
   );
 };
 
-// Main Profile Page Component
+const Controller = ({ userId }) => {
+  const linkClass = ({ isActive }) =>
+    isActive ? "controller-btn bg-blue-500 text-white" : "controller-btn";
+
+  return (
+    <div className="flex gap-4 p-4 bg-white shadow-md rounded-md">
+      <Link to="/business-profile" className={linkClass}>
+        General Info
+      </Link>
+      <button className={linkClass}>Our Applicants</button>
+      <button className={linkClass}>Feedback</button>
+      <Link to={`/create_job/${userId}`} className={linkClass}>
+        Post Jobs
+      </Link>
+      <Link to="/business-jobs" className={linkClass}>
+        All Jobs
+      </Link>
+    </div>
+  );
+};
+
+// ===== Main BProfilePage Component =====
 const BProfilePage = () => {
   const [fullName, setFullName] = useState("mariam Mohamed");
   const [title, setTitle] = useState("");
@@ -229,33 +251,21 @@ const BProfilePage = () => {
       jobCategories,
       jobTypes,
     };
-    console.log("Saved Profile Data:", fullName);
+    console.log("Saved Profile Data:", profileData);
     alert("Profile saved successfully!");
   };
 
   return (
     <div className="container mx-auto p-5">
-      {/* Controller Section */}
-      <div className="max-w-7xl mx-auto px-4 flex justify-center gap-4 py-2">
-        <Link to="/business-profile" className="controller-btn">
-          General Info
-        </Link>
-        <button className="controller-btn">Our Applicants</button>
-        <button className="controller-btn">Feedback</button>
-        <button className="controller-btn">Post Jobs</button>
-        <Link to="/business-jobs" className="controller-btn">
-          All Jobs
-        </Link>
-      </div>
+      {/* Controller Buttons */}
+      <Controller userId={userId} />
 
       {/* Profile Card */}
       <div className="w-full max-w-3xl mx-auto p-4 shadow-md mb-5 border rounded-md mt-16">
         <div className="flex items-center mb-4">
-          {/* Avatar Circle */}
           <div className="bg-blue-500 text-white flex items-center justify-center rounded-full w-24 h-24 text-2xl">
             {initials}
           </div>
-          {/* Name and Editable Info */}
           <div className="ml-3">
             <h4 className="text-2xl font-semibold mb-2">{fullName}</h4>
             <EditableField
@@ -272,7 +282,6 @@ const BProfilePage = () => {
             />
           </div>
         </div>
-        {/* Contact and General Info */}
         <div className="border-t pt-4">
           <h5 className="font-semibold mb-3">Contact Info:</h5>
           <div className="mb-2 flex items-center">
@@ -297,7 +306,6 @@ const BProfilePage = () => {
               onChange={setCvLink}
             />
           </div>
-          {/* CV link preview */}
           {cvLink && (
             <a
               href={cvLink}
@@ -308,7 +316,6 @@ const BProfilePage = () => {
               View CV
             </a>
           )}
-          {/* General Info */}
           <h5 className="mt-4 font-semibold">General Info:</h5>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -348,7 +355,6 @@ const BProfilePage = () => {
               />
             </div>
           </div>
-          {/* Career Interests */}
           <h5 className="mt-4 font-semibold">Career Interests:</h5>
           <EditableField
             label="Job Titles and Keywords"
@@ -370,28 +376,25 @@ const BProfilePage = () => {
           />
         </div>
       </div>
-      {/* Skills, Experience, Education */}
+
+      {/* Skills, Experience, Education Sections */}
       <div className="w-full max-w-3xl mx-auto">
-        <EditableTags
-          title="Skills"
-          label="Skill"
-          placeholder="Enter a skill"
-        />
+        <EditableTags title="Skills" label="Skill" placeholder="Add a skill" />
         <EditableList
-          title="Work Experience"
-          label="Work Experience"
-          placeholder="Enter experience"
+          title="Experience"
+          label="Experience"
+          placeholder="Add experience"
         />
         <EditableList
           title="Education"
           label="Education"
-          placeholder="Enter education"
+          placeholder="Add education"
         />
       </div>
-      {/* Save Button */}
-      <div className="text-right mt-3">
+
+      <div className="text-center mt-6">
         <button
-          className="bg-blue-500 text-white p-2 rounded-md"
+          className="bg-green-500 text-white px-4 py-2 rounded-md"
           onClick={handleSave}
         >
           Save Profile

@@ -1,6 +1,6 @@
 .job-form {
   width: 90%;
-  margin: auto;
+  margin: 2rem auto;
   padding: 20px;
   background: #fafafa;
   border-radius: 10px;
@@ -141,10 +141,11 @@ textarea {
   margin-top: 10px;
 }
 
-button[type="submit"] {
+.submitBtn {
   width: 100%;
   padding: 10px;
   background: #004a7c;
+  font-size: 20px;
   color: white;
   border: none;
   border-radius: 5px;

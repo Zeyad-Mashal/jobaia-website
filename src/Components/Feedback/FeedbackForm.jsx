@@ -71,7 +71,7 @@ const FeedbackForm = () => {
         </div>
       )}
 
-      <div className="w-full max-w-2xl min-h-[60vh] p-6 bg-white shadow-xl rounded-2xl">
+      <div className="w-full max-w-2xl min-h-[60vh] p-6 bg-white shadow-xl rounded-2xl flex flex-col items-center">
         <form onSubmit={handleSubmit}>
           <label className="block text-gray-700 font-semibold text-lg mb-2">
             Describe Your Feedback <span className="text-red-500">*</span>

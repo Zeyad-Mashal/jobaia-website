@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import logo from "../../assets/images/logo.png";
 import { Link } from "react-router-dom";
-import { LogIn } from "lucide-react";
+import { LogIn, Pointer } from "lucide-react";
 const Header = () => {
   const token = localStorage.getItem("token");
   const [logedIn, setLogedIn] = useState(true);
@@ -18,6 +18,17 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const userName = localStorage.getItem("userName");
+
+  const logOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("businessProfileData");
+    localStorage.removeItem("profileData");
+    setTimeout(() => {
+      window.location.reload();
+    }, 600);
+  };
 
   return (
     <Navbar fluid rounded className=" z-50 w-full bg-white shadow-md">
@@ -58,13 +69,24 @@ const Header = () => {
             {/* <Dropdown.Item onClick={localStorage.removeItem("token")}>
               Sign out
             </Dropdown.Item> */}
+            <p
+              className="logout"
+              onClick={logOut}
+              style={{
+                cursor: "pointer ",
+                textAlign: "center",
+                fontSize: "14px",
+                padding: "10px 0",
+              }}
+            >
+              LogOut
+            </p>
           </Dropdown>
         ) : (
           <Link to="/auth" className="btn btn-primary">
             Login
           </Link>
         )}
-
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>

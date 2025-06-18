@@ -22,6 +22,8 @@ const LoginAPI = async (setloading, setError, data, navigate) => {
         } else {
             if (response.status == 400) {
                 setError(result.message)
+                console.log(result.message);
+
                 setloading(false);
             } else if (response.status == 401) {
                 console.log(result.err);

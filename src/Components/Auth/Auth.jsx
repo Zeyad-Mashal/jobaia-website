@@ -89,9 +89,9 @@ const Auth = () => {
                     onChange={(e) => setCompanyName(e.target.value)}
                   />
                 </div>
-                {errors.companyName && (
+                {/* {errors.companyName && (
                   <div className="error-message">{errors.companyName}</div>
-                )}
+                )} */}
               </div>
             )}
 
